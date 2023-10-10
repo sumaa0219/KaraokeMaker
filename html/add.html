@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>収録曲追加</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <h1 style="color: rgb(4, 255, 188);">曲追加フォーム</h1>
+
+    <form id="myForm">
+        <label for="user_input">Enter text:</label>
+        <input type="text" id="user_input" name="user_input" required>
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function submitForm() {
+            var userInput = document.getElementById('user_input').value;
+            $.ajax({
+                type: 'POST',
+                url: '/search',
+                data: { user_input: userInput },
+                success: function (data) {
+                    // レスポンスを受け取り、HTMLを更新
+                    document.getElementById('result').innerHTML = data.result;
+                }
+            });
+        }
+    </script>
+
+
+    <a href="/">ホーム</a><br>
+    <a href="/list">曲一覧</a><br>
+    <a href="#" onclick="javascript:window.history.back(-1);return false;">Back</a>
+</body>
+
+</html>
