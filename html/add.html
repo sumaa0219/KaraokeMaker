@@ -16,30 +16,56 @@
 <body>
     <h1 style="color: rgb(4, 255, 188);">曲追加フォーム</h1>
 
-    <form id="myForm">
-        <label for="user_input">Enter text:</label>
-        <input type="text" id="user_input" name="user_input" required>
-        <button type="button" onclick="submitForm()">Submit</button>
-    </form>
+    <div id="warning"></div>
+    <div id="main">
+        <form id="myForm">
+            <label for="user_input">Enter text:</label>
+            <input type="text" id="user_input" name="user_input" required>
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form>
 
-    <div id="result"></div>
+        <div id="result"></div>
 
-    <script>
-        function submitForm() {
-            var userInput = document.getElementById('user_input').value;
-            $.ajax({
-                type: 'POST',
-                url: '/search',
-                data: { user_input: userInput },
-                success: function (data) {
-                    // レスポンスを受け取り、HTMLを更新
-                    document.getElementById('result').innerHTML = data.result;
-                }
-            });
-        }
-    </script>
+        <script>
+            function submitForm() {
+                var userInput = document.getElementById('user_input').value;
+                $.ajax({
+                    type: 'POST',
+                    url: '/search',
+                    data: { user_input: userInput },
+                    success: function (data) {
+                        // レスポンスを受け取り、HTMLを更新
+                        console.log(data)
+                        document.getElementById('result').innerHTML = data;
+                    }
+                });
+            };
+            function sendGetRequest(url) {
+                // Ajaxリクエストを作成
+                var xhr = new XMLHttpRequest();
+                const element = document.querySelector("#main");
+                // レスポンスを受け取った時の処理
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // レスポンスを受け取り、何かしらの処理を行う
+                        console.log('GET request successful');
+                        element.inert = false;
+                        document.getElementById("warning").innerHTML = ""
+                        alert("ダウンロードが完了しました")
+                    }
+                };
 
+                // GETリクエストを送信
+                xhr.open('GET', '/download?url=' + encodeURIComponent(url), true);
+                xhr.send();
+                alert("ダウンロードを開始します\nしばらくお待ちください")
+                document.getElementById("warning").innerHTML = '<h2 style="color: rgb(255, 0, 0);">曲追加中のため操作できません</h2>'
+                element.inert = true;
 
+            }   
+        </script>
+
+    </div>
     <a href="/">ホーム</a><br>
     <a href="/list">曲一覧</a><br>
     <a href="#" onclick="javascript:window.history.back(-1);return false;">Back</a>

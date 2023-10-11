@@ -20,18 +20,20 @@ class downloadYT():
     def search(self,keyword):
         search = Search(keyword)
         # 最初の結果を取得
-        
+        result = {}
         for i in range(6):
             video = search.results[i]
             title = video.title
             thumbnail_url = video.thumbnail_url
-            channel_name = video.author
+            author = video.author
             url = "https://www.youtube.com/watch?v=" + video.video_id
-            print(title,thumbnail_url,channel_name,url)
-        # for i in range(7):
-        #     info = video[i]
-        #     print(info.url)
-        return video
+            result[i] = {
+                "title":title,
+                "thumbnail_url":thumbnail_url,
+                "author":author,
+                "url":url
+            }
+        return result
         
 
 
