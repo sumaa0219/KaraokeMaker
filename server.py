@@ -31,13 +31,18 @@ def showlist():
     dYT
     print(json)
     page = ""
-    for i in range(len(json)):
-        num = str(i).zfill(4)
-        pageSTR = f"""<div id='{num}'>
-                    <a>{json[num]["musicName"]}</a>
-                    <a>{json[num]["channeleName"]}</a>
-                </div><br></br>"""
-        page+=pageSTR
+    try:
+        for i in range(len(json)):
+            num = str(i).zfill(4)
+            pageSTR = f"""<div id='{num}' style="border: solid 2px"'>
+                        <h2>{num}</h2>
+                        <h2>{json[num]["musicName"]}</h2>
+                        <h3>{json[num]["channeleName"]}</h3>
+                        <img src={json[num]["thumbnail_url"]} height=270 width=495></img>
+                    </div><br></br>"""
+            page+=pageSTR
+    except:
+        page = "<h2>追加されている曲はありません</h2>"
     
     return render_template("list.html",page=page)
 
@@ -52,7 +57,7 @@ def process():
         print(processed_data[0])
         for i in range(6):
             pageSTR = f"""<div id='{i}'>
-                <img src='{processed_data[i]['thumbnail_url']}' height=150 width=200>
+                <img src='{processed_data[i]['thumbnail_url']}' height=270 width=495>
                 <a href='#' onclick='sendGetRequest("{processed_data[i]['url']}")'>{processed_data[i]['title']}</a>
                 <a>{processed_data[i]['author']}</a>
               </div>"""
@@ -66,7 +71,7 @@ def download():
     url = request.args.get('url')
     info = dYT.url_download(url,baseDir)
     print(info)
-    mkJson.addJson(info["musicName"],info["musicAuthor"])
+    mkJson.addJson(info["musicName"],info["musicAuthor"],info["thumbnail_url"])
     subprocess.run(['python', 'vocal-remover/inference.py', '--input',os.path.join(baseDir,info["musicName"]+".mp3"),"--output_dir",karaokeDir])
     os.remove(os.path.join(baseDir,info["musicName"]+".mp3"))
     dYT.convert_to_mp3(os.path.join(karaokeDir,info["musicName"]+".wav"),karaokeDir)

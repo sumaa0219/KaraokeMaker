@@ -13,7 +13,8 @@ class downloadYT():
         mp3_file = self.convert_to_mp3(os.path.join( output_dir, video_file), output_dir)
         musicInfo = {
             "musicName" : self.name,
-            "musicAuthor" : self.channelName
+            "musicAuthor" : self.channelName,
+            "thumbnail_url":self.thumbnail_url
         }
         return musicInfo
     
@@ -41,6 +42,7 @@ class downloadYT():
     def download_youtube_video(self,url, output_dir):
         yt = YouTube(url)
         self.channelName = yt.author
+        self.thumbnail_url = yt.thumbnail_url
         video_stream = yt.streams.get_highest_resolution()
         video_stream.download(output_path=output_dir)
         return video_stream.default_filename

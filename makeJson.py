@@ -21,7 +21,7 @@ class makejson():
             self.json = json.load(json_file)
         return self.json
     
-    def addJson(self,Name,channelName):
+    def addJson(self,Name,channelName,thumbnail_url):
         print(Name,channelName)
         with open(os.path.join(self.baseDir,self.jsonName), 'r', encoding="utf-8") as json_file:
             self.json = json.load(json_file)
@@ -33,7 +33,8 @@ class makejson():
             newdict = {
                 nextNumStr : {
                     "musicName" : Name,
-                    "channeleName" : channelName
+                    "channeleName" : channelName,
+                    "thumbnail_url" : thumbnail_url
                 }
             }
             self.json.update(newdict)
@@ -45,7 +46,8 @@ class makejson():
             newdict = {
                 nextNumStr : {
                     "musicName" : Name,
-                    "channeleName" : channelName
+                    "channeleName" : channelName,
+                    "thumbnail_url" : thumbnail_url
                 }
             }
             with open(os.path.join(self.baseDir,self.jsonName), 'w') as f:
